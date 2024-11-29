@@ -13,6 +13,11 @@ export default function FileTree({ file }: FileTreeProps) {
   const [expanded, setExpanded] = useState(true);
   const { openMenu } = useContextMenuState();
 
+  const onContextMenu = (e: React.MouseEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    openMenu(e.clientX, e.clientY, file.name);
+  };
+
   switch (file.type) {
     case "folder":
       return (
@@ -22,10 +27,7 @@ export default function FileTree({ file }: FileTreeProps) {
             onClick={() => {
               setExpanded(!expanded);
             }}
-            onContextMenu={(e) => {
-              e.preventDefault();
-              openMenu(e.clientX, e.clientY, file.name);
-            }}
+            onContextMenu={onContextMenu}
           >
             <FileIcon file={file} open={expanded} />
             <span>{file.name}</span>
@@ -41,13 +43,7 @@ export default function FileTree({ file }: FileTreeProps) {
       );
     case "file":
       return (
-        <div
-          className={classes.file}
-          onContextMenu={(e) => {
-            e.preventDefault();
-            openMenu(e.clientX, e.clientY, file.name);
-          }}
-        >
+        <div className={classes.file} onContextMenu={onContextMenu}>
           <FileIcon file={file} />
           <span>{file.name}</span>
         </div>
