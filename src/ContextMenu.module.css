@@ -1,10 +1,10 @@
 .menu {
   position: absolute;
-  background-color: light-dark(#e2e8f0, #0f172a);
-  border-radius: 4px;
+  background-color: light-dark(#f1f5f9, #0f172a);
+  border-radius: 5px;
   padding: 5px;
-  box-shadow: 0 0 0 1px light-dark(#1e293b, #0f172a);
-  border: 1px solid light-dark(#1e293b, #f1f5f9);
+  box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+  border: 1px solid light-dark(#e2e8f0, #475569);
 }
 
 .item {
@@ -14,4 +14,5 @@
 
 .item:hover {
   background-color: light-dark(#cbd5e1, #1e293b);
+  border-radius: 5px;
 }
