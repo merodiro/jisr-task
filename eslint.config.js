@@ -37,6 +37,7 @@ export default tseslint.config(
       ],
       "simple-import-sort/imports": "error",
       "simple-import-sort/exports": "error",
+      "@typescript-eslint/consistent-type-definitions": ["error", "type"],
     },
   }
 );
