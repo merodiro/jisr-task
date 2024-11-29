@@ -1,6 +1,5 @@
 import { useState } from "react";
 
-import ContextMenu from "./ContextMenu";
 import { useContextMenuState } from "./ContextMenuContext";
 import { File } from "./data";
 import FileIcon from "./FileIcon";
@@ -14,15 +13,10 @@ export default function FileTree({ file }: FileTreeProps) {
   const [expanded, setExpanded] = useState(true);
   const { openMenu } = useContextMenuState();
 
-  const onAction = (action: string, identifier: string) => {
-    console.log(`Action: ${action}, Target: ${identifier}`);
-  };
-
   switch (file.type) {
     case "folder":
       return (
         <div className={classes.folder}>
-          <ContextMenu onAction={onAction} />
           <div
             className={classes.folderName}
             onClick={() => {
@@ -56,8 +50,6 @@ export default function FileTree({ file }: FileTreeProps) {
         >
           <FileIcon file={file} />
           <span>{file.name}</span>
-
-          <ContextMenu onAction={onAction} />
         </div>
       );
   }
