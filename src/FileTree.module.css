@@ -3,5 +3,18 @@
   border-left: 1px solid light-dark(#cbd5e1, #1e293b);
 }
 
+.folderName {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.files {
+  padding-left: 5px;
+}
+
 .file {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
 }
