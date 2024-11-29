@@ -4,18 +4,23 @@ import ImgIcon from "./assets/file_img.svg?react";
 import JSIcon from "./assets/file_js.svg?react";
 import SvgIcon from "./assets/file_svg.svg?react";
 import TSIcon from "./assets/file_ts.svg?react";
+import FolderIcon from "./assets/folder.svg?react";
 import FolderOpenIcon from "./assets/folder-open.svg?react";
 import { File } from "./data";
 import classes from "./FileIcon.module.css";
 
 type FileIconProps = Readonly<{
   file: File;
+  open?: boolean;
 }>;
 
-export default function FileIcon({ file }: FileIconProps) {
+export default function FileIcon({ file, open }: FileIconProps) {
   switch (file.type) {
     case "folder":
-      return <FolderOpenIcon className={classes.icon} />;
+      if (open) {
+        return <FolderOpenIcon className={classes.icon} />;
+      }
+      return <FolderIcon className={classes.icon} />;
     case "file":
       switch (file.meta) {
         case "js":
