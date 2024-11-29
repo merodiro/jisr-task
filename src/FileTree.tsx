@@ -1,5 +1,6 @@
 import { useState } from "react";
 
+import ContextMenu, { useContextMenu } from "./ContextMenu";
 import { File } from "./data";
 import FileIcon from "./FileIcon";
 import classes from "./FileTree.module.css";
@@ -9,22 +10,44 @@ type FileTreeProps = Readonly<{
 }>;
 
 export default function FileTree({ file }: FileTreeProps) {
-  const [open, setOpen] = useState(false);
+  const [expanded, setExpanded] = useState(true);
+
+  const { contextOpen, contextPosition, setContextOpen, setContextPosition } =
+    useContextMenu();
+
+  const onAction = (action: string) => {
+    console.log(action, file.name);
+  };
 
   switch (file.type) {
     case "folder":
       return (
         <div className={classes.folder}>
+          {contextOpen && (
+            <ContextMenu
+              x={contextPosition.x}
+              y={contextPosition.y}
+              onAction={onAction}
+            />
+          )}
           <div
             className={classes.folderName}
             onClick={() => {
-              setOpen(!open);
+              setExpanded(!expanded);
+            }}
+            onContextMenu={(e) => {
+              e.preventDefault();
+              setContextOpen(true);
+              setContextPosition({
+                x: e.clientX,
+                y: e.clientY,
+              });
             }}
           >
-            <FileIcon file={file} open={open} />
+            <FileIcon file={file} open={expanded} />
             <span>{file.name}</span>
           </div>
-          {open && (
+          {expanded && (
             <div className={classes.files}>
               {file.data.map((f) => (
                 <FileTree key={f.name} file={f} />
@@ -35,9 +58,27 @@ export default function FileTree({ file }: FileTreeProps) {
       );
     case "file":
       return (
-        <div className={classes.file}>
+        <div
+          className={classes.file}
+          onContextMenu={(e) => {
+            e.preventDefault();
+            setContextOpen(true);
+            setContextPosition({
+              x: e.clientX,
+              y: e.clientY,
+            });
+          }}
+        >
           <FileIcon file={file} />
           <span>{file.name}</span>
+
+          {contextOpen && (
+            <ContextMenu
+              x={contextPosition.x}
+              y={contextPosition.y}
+              onAction={onAction}
+            />
+          )}
         </div>
       );
   }
