@@ -1,34 +1,31 @@
-import { useEffect, useState } from "react";
-
 import classes from "./ContextMenu.module.css";
+import { useContextMenuState } from "./ContextMenuContext";
 
-const contextItems = [
-  {
-    name: "Copy",
-  },
-  {
-    name: "Rename",
-  },
-  {
-    name: "Delete",
-  },
-];
+const contextItems = [{ name: "Copy" }, { name: "Rename" }, { name: "Delete" }];
 
-type ContextMenuProps = Readonly<{
-  x: number;
-  y: number;
-  onAction: (action: string) => void;
-}>;
+type ContextMenuProps = {
+  onAction: (action: string, identifier: string) => void;
+};
 
-export default function ContextMenu({ x, y, onAction }: ContextMenuProps) {
+export default function ContextMenu({ onAction }: ContextMenuProps) {
+  const { isOpen, position, identifier, closeMenu } = useContextMenuState();
+
+  if (!isOpen) return null;
+
   return (
-    <div className={classes.menu} style={{ left: x, top: y }}>
+    <div
+      className={classes.menu}
+      style={{ left: position.x, top: position.y }}
+      onClick={closeMenu}
+    >
       {contextItems.map((item) => (
         <div
           key={item.name}
           className={classes.item}
           onClick={() => {
-            onAction(item.name);
+            if (!identifier) return;
+            onAction(item.name, identifier);
+            closeMenu();
           }}
         >
           {item.name}
@@ -36,28 +33,4 @@ export default function ContextMenu({ x, y, onAction }: ContextMenuProps) {
       ))}
     </div>
   );
-}
-
-export function useContextMenu() {
-  const [contextOpen, setContextOpen] = useState(false);
-  const [contextPosition, setContextPosition] = useState({
-    x: 0,
-    y: 0,
-  });
-  useEffect(() => {
-    const handleClick = () => {
-      setContextOpen(false);
-    };
-    document.addEventListener("click", handleClick);
-    return () => {
-      document.removeEventListener("click", handleClick);
-    };
-  }, []);
-
-  return {
-    contextOpen,
-    setContextOpen,
-    contextPosition,
-    setContextPosition,
-  };
 }
