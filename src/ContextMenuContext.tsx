@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState } from "react";
+import React, { createContext, useContext, useEffect, useState } from "react";
 
 type ContextMenuState = {
   isOpen: boolean;
@@ -29,6 +29,16 @@ export function ContextMenuProvider({
     setIsOpen(false);
     setIdentifier(undefined);
   };
+
+  useEffect(() => {
+    const handleClick = () => {
+      setIsOpen(false);
+    };
+    document.addEventListener("click", handleClick);
+    return () => {
+      document.removeEventListener("click", handleClick);
+    };
+  }, []);
 
   return (
     <ContextMenuContext.Provider
